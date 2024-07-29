@@ -676,7 +676,7 @@ def get_filtered_export_preset(export_preset_name, channel_type_names):
             if not channel_map.get("fileName"):
                 continue
 
-            if f"_{channel_name}" in channel_map["fileName"]:
+            if channel_name in channel_map["fileName"]:
                 target_maps.append(channel_map)
     # Create a new preset
     return {
