@@ -92,16 +92,25 @@ class CollectTextureSet(pyblish.api.InstancePlugin):
             task_name = task_entity["name"]
             task_type = task_entity["taskType"]
 
+        # TODO: The product type actually isn't 'texture' currently but
+        #   for now this is only done so the product name starts with
+        #   'texture'
         image_product_name = get_product_name(
-            # TODO: The product type actually isn't 'texture' currently but
-            #   for now this is only done so the product name starts with
-            #   'texture'
             context.data["projectName"],
             task_name,
             task_type,
             context.data["hostName"],
             product_type="texture",
             variant=instance.data["variant"] + suffix,
+            project_settings=context.data["project_settings"]
+        )
+        image_product_group_name = get_product_name(
+            context.data["projectName"],
+            task_name,
+            task_type,
+            context.data["hostName"],
+            product_type="texture",
+            variant=instance.data["variant"],
             project_settings=context.data["project_settings"]
         )
 
@@ -141,7 +150,7 @@ class CollectTextureSet(pyblish.api.InstancePlugin):
         image_instance.data["representations"] = [representation]
 
         # Group the textures together in the loader
-        image_instance.data["productGroup"] = image_product_name
+        image_instance.data["productGroup"] = image_product_group_name
 
         # Store the texture set name and stack name on the instance
         image_instance.data["textureSetName"] = texture_set_name
