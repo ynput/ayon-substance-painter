@@ -34,7 +34,7 @@ DEFAULT_CREATOR_SETTINGS = {
             {"name": "Glossiness", "value": "_Glossiness"},
             {"name": "Anisotropy Level",
              "value": "_Anisotropylevel"},
-            {"name": "Ambient Occulsion", "value": "_AO"},
+            {"name": "Ambient Occlusion", "value": "_AO"},
             {"name": "Anisotropy Angle",
              "value": "_Anisotropyangle"},
             {"name": "Transmissive", "value": "_Transmissive"},
