@@ -22,20 +22,17 @@ class CreatorsModel(BaseSettingsModel):
 DEFAULT_CREATOR_SETTINGS = {
     "CreateTextures": {
         "channel_mapping": [
-            {"name": "Anisotropy Angle",
-             "value": "_Anisotropyangle"},
+            {"name": "Anisotropy Angle", "value": "_Anisotropyangle"},
+            {"name": "Anisotropy Level", "value": "_Anisotropylevel"},
             {"name": "Base Color", "value": "_BaseColor"},
             {"name": "Metallic", "value": "_Metallic"},
             {"name": "Roughness", "value": "_Roughness"},
             {"name": "Normal", "value": "_Normal"},
             {"name": "Height", "value": "_Height"},
-            {"name": "Specular Edge Color",
-             "value": "_SpecularEdgeColor"},
+            {"name": "Specular Edge Color", "value": "_SpecularEdgeColor"},
             {"name": "Opacity", "value": "_Opacity"},
             {"name": "Displacement", "value": "_Displacement"},
             {"name": "Glossiness", "value": "_Glossiness"},
-            {"name": "Anisotropy Level",
-             "value": "_Anisotropylevel"},
             {"name": "Ambient Occlusion", "value": "_AO"},
             {"name": "Transmissive", "value": "_Transmissive"},
             {"name": "Reflection", "value": "_Reflection"},
@@ -51,8 +48,7 @@ DEFAULT_CREATOR_SETTINGS = {
             {"name": "Coat Opacity", "value": "_CoatOpacity"},
             {"name": "Coat Color", "value": "_CoatColor"},
             {"name": "Coat Roughness", "value": "_CoatRoughness"},
-            {"name": "Coat Specular Level",
-             "value": "_CoatSpecularLevel"},
+            {"name": "Coat Specular Level", "value": "_CoatSpecularLevel"},
             {"name": "Coat Normal", "value": "_CoatNormal"}
         ],
     }
