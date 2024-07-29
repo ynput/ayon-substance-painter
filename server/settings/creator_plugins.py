@@ -51,7 +51,7 @@ DEFAULT_CREATOR_SETTINGS = {
             {"name": "Coat Opacity", "value": "_CoatOpacity"},
             {"name": "Coat Color", "value": "_CoatColor"},
             {"name": "Coat Roughness", "value": "_CoatRoughness"},
-            {"name": "Coat Specula rLevel",
+            {"name": "Coat Specular Level",
              "value": "_CoatSpecularLevel"},
             {"name": "Coat Normal", "value": "_CoatNormal"}
         ],
