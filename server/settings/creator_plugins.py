@@ -22,6 +22,8 @@ class CreatorsModel(BaseSettingsModel):
 DEFAULT_CREATOR_SETTINGS = {
     "CreateTextures": {
         "channel_mapping": [
+            {"name": "Anisotropy Angle",
+             "value": "_Anisotropyangle"},
             {"name": "Base Color", "value": "_BaseColor"},
             {"name": "Metallic", "value": "_Metallic"},
             {"name": "Roughness", "value": "_Roughness"},
@@ -35,8 +37,6 @@ DEFAULT_CREATOR_SETTINGS = {
             {"name": "Anisotropy Level",
              "value": "_Anisotropylevel"},
             {"name": "Ambient Occlusion", "value": "_AO"},
-            {"name": "Anisotropy Angle",
-             "value": "_Anisotropyangle"},
             {"name": "Transmissive", "value": "_Transmissive"},
             {"name": "Reflection", "value": "_Reflection"},
             {"name": "Diffuse", "value": "_Diffuse"},
