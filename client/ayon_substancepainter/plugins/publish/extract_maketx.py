@@ -141,16 +141,19 @@ class ExtractMakeTX(publish.Extractor,
 
             # Generate the TX files
             tx_files = []
-            for source_filepath in source_files:
+            staging_dir = instance.data["stagingDir"]
+            for source_filename in source_files:
+                source_filepath = os.path.join(staging_dir, source_filename)
                 tx_filepath = convert_to_tx(
                     source_filepath,
                     ocio_config_path=ocio_config_path,
                     colorspace=colorspace,
                     target_colorspace=target_colorspace,
-                    staging_dir=instance.data["stagingDir"],
+                    staging_dir=staging_dir,
                     log=self.log
                 )
-                tx_files.append(tx_filepath)
+                tx_filename = os.path.basename(tx_filepath)
+                tx_files.append(tx_filename)
 
             # Make sure to store again as single file it was also in the
             # original representation
