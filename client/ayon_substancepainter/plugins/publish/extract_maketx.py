@@ -96,7 +96,8 @@ def convert_to_tx(
 
 
 class ExtractMakeTX(publish.Extractor,
-                    publish.ColormanagedPyblishPluginMixin):
+                    publish.ColormanagedPyblishPluginMixin,
+                    publish.OptionalPyblishPluginMixin):
     """Extract MakeTX
 
     This requires color management to be enabled so that the MakeTX file
@@ -109,11 +110,14 @@ class ExtractMakeTX(publish.Extractor,
     label = "Extract TX"
     hosts = ["substancepainter"]
     families = ["image"]
+    settings_category = "substancepainter"
 
     # Run directly after textures export
     order = publish.Extractor.order - 0.099
 
     def process(self, instance):
+        if not self.is_active(instance.data):
+            return
 
         representations: "list[dict]" = instance.data["representations"]
 
