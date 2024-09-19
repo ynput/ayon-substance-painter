@@ -132,6 +132,10 @@ class ExtractMakeTX(publish.Extractor,
 
             colorspace_data: dict = tx_representation.get("colorspaceData", {})
             if not colorspace_data:
+                self.log.debug(
+                    "Skipping .tx conversion for representation "
+                    f"{representation['name']} because it has no colorspace "
+                    "data.")
                 continue
 
             colorspace: str = colorspace_data["colorspace"]
