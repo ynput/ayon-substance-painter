@@ -176,6 +176,12 @@ class ExtractMakeTX(publish.Extractor,
             # Only ever one `tx` representation is needed
             break
 
+        else:
+            self.log.warning(
+                "No .tx file conversions occurred. This may happen because"
+                " no representations were found with colorspace data."
+            )
+
     def get_target_colorspace(self, ocio_path: str) -> str:
         ocio_colorspaces = get_ocio_config_colorspaces(ocio_path)
         return ocio_colorspaces["roles"]["rendering"]["colorspace"]
