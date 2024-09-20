@@ -9,7 +9,7 @@ def cleanup_ayon_qt_widgets():
 
     """
     # TODO: Create a more reliable method to close down all AYON Qt widgets
-    from PySide2 import QtWidgets
+    from qtpy import QtWidgets
     import substance_painter.ui
 
     # Kill AYON Qt widgets

@@ -162,7 +162,7 @@ class SubstanceHost(HostBase, IWorkfileHost, ILoadHost, IPublishHost):
         return metadata.get(OPENPYPE_METADATA_CONTEXT_KEY) or {}
 
     def _install_menu(self):
-        from PySide2 import QtWidgets
+        from qtpy import QtWidgets
         from ayon_core.tools.utils import host_tools
 
         parent = substance_painter.ui.get_main_window()
