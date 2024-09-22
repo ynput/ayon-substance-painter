@@ -419,7 +419,7 @@ def get_parsed_export_maps(config):
     # Get current project mesh path and project path to explicitly match
     # the $mesh and $project tokens
     project_mesh_path = substance_painter.project.last_imported_mesh_path()
-    project_path = substance_painter.project.file_path()
+    project_path = substance_painter.project.file_path() or ""
 
     # Get the current export path to strip this of the beginning of filepath
     # results, since filename templates don't have these we'll match without
