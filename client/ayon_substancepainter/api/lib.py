@@ -206,7 +206,6 @@ def get_export_templates(config, format="png", strip_folder=True):
     if version_info[0:2] >= (10, 1):
         cmd = f'alg.mapexport.getPathsExportDocumentMaps("{preset}", "{folder}", "{format}", [])'  # noqa
 
-
     result = substance_painter.js.evaluate(cmd)
 
     if strip_folder:
