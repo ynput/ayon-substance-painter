@@ -197,6 +197,15 @@ def get_export_templates(config, format="png", strip_folder=True):
     folder = config["exportPath"].replace("\\", "/")
     preset = config["defaultExportPreset"]
     cmd = f'alg.mapexport.getPathsExportDocumentMaps("{preset}", "{folder}", "{format}")'  # noqa
+
+    # The optional stack path argument is broken in Substance Painter 10.1
+    # and fails on painter's C++ API triggering from the javascript API through
+    # python. So we pass it the empty list of stack paths explicitly.
+    # See `ayon-substancepainter` issue #13
+    version_info = substance_painter.application.version_info()
+    if version_info[0:2] >= (10, 1):
+        cmd = f'alg.mapexport.getPathsExportDocumentMaps("{preset}", "{folder}", "{format}", [])'  # noqa
+
     result = substance_painter.js.evaluate(cmd)
 
     if strip_folder:
@@ -410,7 +419,7 @@ def get_parsed_export_maps(config):
     # Get current project mesh path and project path to explicitly match
     # the $mesh and $project tokens
     project_mesh_path = substance_painter.project.last_imported_mesh_path()
-    project_path = substance_painter.project.file_path()
+    project_path = substance_painter.project.file_path() or ""
 
     # Get the current export path to strip this of the beginning of filepath
     # results, since filename templates don't have these we'll match without
