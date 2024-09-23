@@ -203,8 +203,9 @@ def get_export_templates(config, format="png", strip_folder=True):
     # python. So we pass it the empty list of stack paths explicitly.
     # See `ayon-substancepainter` issue #13
     version_info = substance_painter.application.version_info()
-    if version_info[0:1] >= (10, 1):
-        cmd = cmd.replace(")", ", [])")
+    if version_info[0:2] >= (10, 1):
+        cmd = f'alg.mapexport.getPathsExportDocumentMaps("{preset}", "{folder}", "{format}", [])'  # noqa
+
 
     result = substance_painter.js.evaluate(cmd)
 
