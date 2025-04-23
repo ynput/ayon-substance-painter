@@ -8,7 +8,7 @@ class ChannelMappingItemModel(BaseSettingsModel):
 
 
 class CreateTextureModel(BaseSettingsModel):
-    channelmapping: list[ChannelMappingItemModel] = SettingsField(
+    channel_mapping: list[ChannelMappingItemModel] = SettingsField(
         default_factory=list, title="Channel Mapping")
 
 
@@ -21,7 +21,7 @@ class CreatorsModel(BaseSettingsModel):
 
 DEFAULT_CREATOR_SETTINGS = {
     "CreateTextures": {
-        "channelmapping": [
+        "channel_mapping": [
             {"name": "Anisotropy Angle", "value": "Anisotropyangle"},
             {"name": "Anisotropy Level", "value": "Anisotropylevel"},
             {"name": "Base Color", "value": "BaseColor"},
