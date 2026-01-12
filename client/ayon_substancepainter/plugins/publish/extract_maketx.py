@@ -109,9 +109,8 @@ class ExtractMakeTX(publish.Extractor,
 
     label = "Extract TX"
     hosts = ["substancepainter"]
-    families = ["textureSet", "image"]
+    families = ["image"]
     settings_category = "substancepainter"
-    optional = True
 
     # Run directly after textures export
     order = publish.Extractor.order - 0.099
