@@ -6,6 +6,7 @@ import pyblish.api
 import substance_painter.export
 
 from ayon_core.pipeline import PublishValidationError
+from ayon_substancepainter.api.lib import map_includes_channel
 
 
 class ValidateOutputMaps(pyblish.api.InstancePlugin):
@@ -131,23 +132,30 @@ class ValidateOutputMaps(pyblish.api.InstancePlugin):
         """
         creator_attrs = instance.data["creator_attributes"]
         export_channel = creator_attrs.get("exportChannel", [])
-        tmp_export_channel = copy.deepcopy(export_channel)
-        invalid_channel = []
-        if export_channel:
-            for export_preset in config.get("exportPresets", {}):
-                if not export_preset.get("maps", {}):
+        if not export_channel:
+            return []
+
+        export_presets = config.get("exportPresets", [])
+        if not export_presets:
+            return []
+
+        invalid_channels = []
+        for channel in export_channel:
+            for export_preset in export_presets:
+                maps = export_preset.get("maps", [])
+                if not maps:
                     raise PublishValidationError(
                         "No Texture Map Exported with texture set: {}.".format(
                             instance.name)
                     )
-                map_names = [channel_map["fileName"] for channel_map
-                             in export_preset["maps"]]
-                for channel in tmp_export_channel:
-                    # Check if channel is found in at least one map
-                    for map_name in map_names:
-                        if channel in map_name:
-                            break
-                    else:
-                        invalid_channel.append(channel)
 
-        return invalid_channel
+                included = any(map_includes_channel(
+                    channel_map, channel) for channel_map in maps
+                )
+                if included:
+                    break
+            else:
+                # not found in any export preset
+                invalid_channels.append(channel)
+
+        return invalid_channels
