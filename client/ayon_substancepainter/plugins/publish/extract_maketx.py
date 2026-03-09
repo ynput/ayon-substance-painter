@@ -119,7 +119,6 @@ class ExtractMakeTX(publish.Extractor,
 
     @classmethod
     def instance_matches_plugin_families(cls, instance: "CreatedInstance"):  # noqa: F821
-        # Show only for instances from settings based create plugins
         identifier = "io.openpype.creators.substancepainter.textureset"
         return instance.creator_identifier == identifier
 
