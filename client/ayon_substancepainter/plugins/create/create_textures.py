@@ -24,20 +24,13 @@ class CreateTextures(Creator):
     """Create a texture set."""
     identifier = "io.openpype.creators.substancepainter.textureset"
     label = "Textures"
-    product_type = "textureSet"
     product_base_type = "textureSet"
+    product_type = product_base_type
     icon = "picture-o"
 
     default_variant = "Main"
     settings_category = "substancepainter"
     channel_mapping = []
-
-    def apply_settings(self, project_settings):
-        settings = project_settings["substancepainter"].get("create", [])  # noqa
-        if settings:
-            self.channel_mapping = settings["CreateTextures"].get(
-                "channel_mapping", [])
-
 
     def create(self, product_name, instance_data, pre_create_data):
         if not substance_painter.project.is_open():
@@ -77,8 +70,13 @@ class CreateTextures(Creator):
 
     def collect_instances(self):
         for instance in get_instances():
-            if (instance.get("creator_identifier") == self.identifier or
-                    instance.get("productType") == self.product_type):
+            product_base_type = instance.get("productBaseType")
+            if not product_base_type:
+                product_base_type = instance.get("productType")
+            if (
+                instance.get("creator_identifier") == self.identifier
+                or product_base_type == self.product_base_type
+            ):
                 self.create_instance_in_context_from_existing(instance)
 
     def update_instances(self, update_list):
@@ -97,8 +95,10 @@ class CreateTextures(Creator):
 
     # Helper methods (this might get moved into Creator class)
     def create_instance_in_context(self, product_name, data):
+        product_type = data.get("productType") or self.product_base_type
         instance = CreatedInstance(
-            product_type=self.product_type,
+            product_base_type=self.product_base_type,
+            product_type=product_type,
             product_name=product_name,
             data=data,
             creator=self

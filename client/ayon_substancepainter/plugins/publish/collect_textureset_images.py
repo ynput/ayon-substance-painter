@@ -89,7 +89,6 @@ class CollectTextureSet(pyblish.api.InstancePlugin):
         ext = os.path.splitext(first_filepath)[1]
         assert ext.lstrip("."), f"No extension: {ext}"
 
-
         # all_texture_sets = substance_painter.textureset.all_texture_sets()
         # Define the suffix we want to give this particular texture
         # set and set up a remapped product naming for it.
@@ -111,42 +110,31 @@ class CollectTextureSet(pyblish.api.InstancePlugin):
         map_identifier = strip_template(template)
         suffix += f".{map_identifier}"
 
-        task_name = task_type = None
-        if task_entity:
-            task_name = task_entity["name"]
-            task_type = task_entity["taskType"]
+        # Keep product type from instance if was customized
+        product_type = instance.data["productType"]
+        if product_type == instance.data["productBaseType"]:
+            product_type = None
 
         # TODO: The product type actually isn't 'texture' currently but
         #   for now this is only done so the product name starts with
         #   'texture'
         product_base_type = "texture"
-        if getattr(get_product_name, "use_entities", False):
-            get_product_name_kwargs = {
-                "task_name": task_name,
-                "task_type": task_type,
-            }
-        else:
-            get_product_name_kwargs = {
-                "folder_entity": folder_entity,
-                "task_entity": task_entity,
-                "product_base_type": product_base_type,
-            }
-
-        image_product_name = get_product_name(
+        image_kwargs = dict(
             project_name=context.data["projectName"],
+            folder_entity=folder_entity,
+            task_entity=task_entity,
+            product_base_type=product_base_type,
+            product_type=product_type or product_base_type,
             host_name=context.data["hostName"],
-            product_type=product_base_type,
-            variant=instance.data["variant"] + suffix,
             project_settings=context.data["project_settings"],
-            **get_product_name_kwargs,
+        )
+        image_product_name = get_product_name(
+            variant=instance.data["variant"] + suffix,
+            **image_kwargs
         )
         image_product_group_name = get_product_name(
-            project_name=context.data["projectName"],
-            host_name=context.data["hostName"],
-            product_type=product_base_type,
             variant=instance.data["variant"],
-            project_settings=context.data["project_settings"],
-            **get_product_name_kwargs,
+            **image_kwargs
         )
 
         # Prepare representation
@@ -169,23 +157,24 @@ class CollectTextureSet(pyblish.api.InstancePlugin):
         representation["tags"] = ["review"]
         representation["stagingDir"] = staging_dir
         # Clone the instance
-        product_type = "image"
+        product_base_type = "image"
         image_instance = context.create_instance(image_product_name)
         image_instance[:] = instance[:]
         image_instance.data.update(copy.deepcopy(dict(instance.data)))
         image_instance.data["name"] = image_product_name
         image_instance.data["label"] = image_product_name
         image_instance.data["productName"] = image_product_name
-        image_instance.data["productType"] = product_type
-        image_instance.data["productBaseType"] = product_type
-        image_instance.data["family"] = product_type
-        image_instance.data["families"] = [product_type, "textures"]
+        image_instance.data["productType"] = product_type or product_base_type
+        image_instance.data["productBaseType"] = product_base_type
+        image_instance.data["family"] = product_base_type
+        image_instance.data["families"] = [product_base_type, "textures"]
         if instance.data["creator_attributes"].get("review"):
             image_instance.data["families"].append("review")
 
-            entity: dict = instance.data.get(
-                "taskEntity", instance.data["folderEntity"]
-            )
+            entity: dict = instance.data.get("taskEntity")
+            if not entity:
+                entity = instance.data["folderEntity"]
+
             fps: float = entity["attrib"]["fps"]
             image_instance.data["fps"] = fps
             if bool(outputs[0].get("udim")):
