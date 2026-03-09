@@ -6,7 +6,6 @@ import ayon_api
 
 import substance_painter.textureset
 from ayon_core.pipeline import tempdir
-from ayon_core.lib import BoolDef
 from ayon_substancepainter.api.lib import (
     get_parsed_export_maps,
     get_filtered_export_preset,
