@@ -21,16 +21,13 @@ class CreateWorkfile(AutoCreator):
 
     default_variant = "Main"
     settings_category = "substancepainter"
+    active_on_create = True
 
     def create(self):
-
         if not substance_painter.project.is_open():
             return
 
         variant = self.default_variant
-        project_name = self.project_name
-        folder_path = self.create_context.get_current_folder_path()
-        task_name = self.create_context.get_current_task_name()
         host_name = self.create_context.host_name
 
         # Workfile instance should always exist and must only exist once.
@@ -67,8 +64,8 @@ class CreateWorkfile(AutoCreator):
             data = {
                 "folderPath": folder_path,
                 "task": task_name,
-                "variant": variant
             }
+
             current_instance = self.create_instance_in_context(product_name,
                                                                data)
         elif (
@@ -88,6 +85,9 @@ class CreateWorkfile(AutoCreator):
             current_instance["task"] = task_name
             current_instance["productName"] = product_name
 
+        current_instance["active"] = self.active_on_create
+        current_instance["variant"] = variant
+
         set_instance(
             instance_id=current_instance.get("instance_id"),
             instance_data=current_instance.data_to_store()
@@ -105,6 +105,9 @@ class CreateWorkfile(AutoCreator):
             # Persist the data
             instance_id = instance.get("instance_id")
             instance_data = instance.data_to_store()
+            instance_data["active"] = instance.get(
+                "active", self.active_on_create
+            )
             instance_data_by_id[instance_id] = instance_data
         set_instances(instance_data_by_id, update=True)
 

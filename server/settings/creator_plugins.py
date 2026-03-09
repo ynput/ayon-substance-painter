@@ -12,7 +12,17 @@ class CreateTextureModel(BaseSettingsModel):
         default_factory=list, title="Channel Mapping")
 
 
+class AutoCreateModel(BaseSettingsModel):
+    enabled: bool = SettingsField(title="Enabled")
+    active_on_create: bool = SettingsField(True, title="Active by default")
+    default_variant: str = SettingsField("", title="Default Variant")
+
+
 class CreatorsModel(BaseSettingsModel):
+    CreateWorkfile: AutoCreateModel = SettingsField(
+        default_factory=AutoCreateModel,
+        title="Create Workfile"
+    )
     CreateTextures: CreateTextureModel = SettingsField(
         default_factory=CreateTextureModel,
         title="Create Textures"
@@ -20,6 +30,11 @@ class CreatorsModel(BaseSettingsModel):
 
 
 DEFAULT_CREATOR_SETTINGS = {
+    "CreateWorkfile": {
+        "enabled": True,
+        "active_on_create": True,
+        "default_variant": "Main"
+    },
     "CreateTextures": {
         "channel_mapping": [
             {"name": "Anisotropy Angle", "value": "Anisotropyangle"},
