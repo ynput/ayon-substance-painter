@@ -112,8 +112,16 @@ class ExtractMakeTX(publish.Extractor,
     families = ["image"]
     settings_category = "substancepainter"
 
+    # Settings
+    optional = True
     # Run directly after textures export
     order = publish.Extractor.order - 0.099
+
+    @classmethod
+    def instance_matches_plugin_families(cls, instance: "CreatedInstance"):
+        # Show only for instances from settings based create plugins
+        identifier = "io.openpype.creators.substancepainter.textureset"
+        return instance.creator_identifier == identifier
 
     def process(self, instance):
         if not self.is_active(instance.data):

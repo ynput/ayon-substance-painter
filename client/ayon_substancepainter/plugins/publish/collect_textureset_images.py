@@ -209,10 +209,6 @@ class CollectTextureSet(pyblish.api.InstancePlugin,
         image_instance.data["textureSetName"] = texture_set_name
         image_instance.data["textureStackName"] = stack_name
 
-        attr_values = self.get_attr_values_from_data(instance.data)
-        image_instance.data["publish_attributes"] = {
-            "ExtractMakeTX": {"active": attr_values.get("maketx", True)}
-        }
         # Store color space with the instance
         # Note: The extractor will assign it to the representation
         colorspace = outputs[0].get("colorSpace")
@@ -301,14 +297,6 @@ class CollectTextureSet(pyblish.api.InstancePlugin,
         )
         config.update(maps)
         return config
-
-    @classmethod
-    def get_attribute_defs(cls):
-        return [
-            BoolDef("maketx",
-                    label="Extract MakeTX",
-                    default=True)
-        ]
 
 
 class CollectTextureSetStagingDir(pyblish.api.InstancePlugin):
