@@ -12,11 +12,9 @@ from ayon_substancepainter.api.lib import (
     strip_template
 )
 from ayon_core.pipeline.create import get_product_name
-from ayon_core.pipeline.publish import AYONPyblishPluginMixin
 
 
-class CollectTextureSet(pyblish.api.InstancePlugin,
-                        AYONPyblishPluginMixin):
+class CollectTextureSet(pyblish.api.InstancePlugin):
     """Extract Textures using an output template config"""
     # TODO: Production-test usage of color spaces
     # TODO: Detect what source data channels end up in each file
