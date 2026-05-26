@@ -144,7 +144,8 @@ class SubstanceLoadProjectMesh(load.LoaderPlugin):
 
     product_base_types = {"*"}
     product_types = product_base_types
-    representations = {"abc", "fbx", "obj", "gltf", "usd", "usda", "usdc"}
+    representations = {"*"}
+    extensions = {"abc", "fbx", "obj", "gltf", "usd", "usda", "usdc"}
 
     label = "Load mesh"
     order = -10

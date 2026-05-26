@@ -61,6 +61,15 @@ class CreateTextures(Creator):
                 node_number.uid() for node_number in
                 substance_painter.layerstack.get_selected_nodes(stack)]
 
+        # Define image product type
+        # NOTE: Currently use product type of texture for image. If there is
+        #   need to define different image product type in future it can be
+        #   easily added as separate setting or enum.
+        instance_data["image_product_type"] = (
+            instance_data["productType"]
+            if self.product_type_items
+            else None
+        )
         instance = self.create_instance_in_context(product_name,
                                                    instance_data)
         set_instance(
@@ -69,14 +78,26 @@ class CreateTextures(Creator):
         )
 
     def collect_instances(self):
+        # Prepare default value for image_product_type
+        # - in case there is none then use first product type item
+        #   otherwise 'image_product_type' will be None which will result in
+        #   'image' product type.
+        image_product_type = None
+        if self.product_type_items:
+            image_product_type = self.product_type_items[0].product_type
+
         for instance in get_instances():
             product_base_type = instance.get("productBaseType")
             if not product_base_type:
                 product_base_type = instance.get("productType")
+
             if (
                 instance.get("creator_identifier") == self.identifier
                 or product_base_type == self.product_base_type
             ):
+                # Fill image_product_type for instances created before this
+                #   was added if not already set
+                instance.setdefault("image_product_type", image_product_type)
                 self.create_instance_in_context_from_existing(instance)
 
     def update_instances(self, update_list):

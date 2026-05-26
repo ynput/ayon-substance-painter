@@ -23,12 +23,5 @@ class SubstanceAddon(AYONAddon, IHostAddon):
         # Log in Substance Painter doesn't support custom terminal colors
         env["AYON_LOG_NO_COLORS"] = "1"
 
-    def get_launch_hook_paths(self, app):
-        if app.host_name != self.host_name:
-            return []
-        return [
-            os.path.join(SUBSTANCE_HOST_DIR, "hooks")
-        ]
-
     def get_workfile_extensions(self):
         return [".spp", ".toc"]

@@ -6,7 +6,7 @@ from ayon_core.pipeline import registered_host
 class CollectCurrentFile(pyblish.api.ContextPlugin):
     """Inject the current working file into context"""
 
-    order = pyblish.api.CollectorOrder - 0.49
+    order = pyblish.api.CollectorOrder - 0.5
     label = "Current Workfile"
     hosts = ["substancepainter"]
 

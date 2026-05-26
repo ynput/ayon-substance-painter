@@ -9,8 +9,6 @@ More information see:
 
 """  # noqa E501
 import substance_painter.export
-import substance_painter.js
-import json
 
 from .lib import (
     get_document_structure,
@@ -71,10 +69,6 @@ def get_project_channel_data():
     }
 
     """
-
-    keys = ["colorSpace"]
-    query = {key: f"${key}" for key in keys}
-
     config = {
         "exportPath": "/",
         "exportShaderParams": False,
@@ -85,7 +79,10 @@ def get_project_channel_data():
 
             # List of maps making up this export preset.
             "maps": [{
-                "fileName": json.dumps(query),
+                # Generate filename that contains just the colorspace and a
+                # placeholder character (for potential empty colorspace values)
+                # to get colorspace name from export file list
+                "fileName": "_$colorSpace",
                 # List of source/destination defining which channels will
                 # make up the texture file.
                 "channels": [],
@@ -101,14 +98,15 @@ def get_project_channel_data():
         }],
     }
 
-    def _get_query_output(config):
+    def _get_colorspace(config_):
         # Return the basename of the single output path we defined
-        result = substance_painter.export.list_project_textures(config)
+        result = substance_painter.export.list_project_textures(config_)
         path = next(iter(result.values()))[0]
-        # strip extension and slash since we know relevant json data starts
-        # and ends with { and } characters
-        path = path.strip("/\\.exr")
-        return json.loads(path)
+        return {
+            # strip extension, path slashes and also the starting `_`
+            # from our filename (to ensure it at least has some filename)
+            "colorSpace": path.strip("/\\.exr")[1:],
+        }
 
     # Query for each type of channel (color and data)
     color_channel, data_channel = _get_first_color_and_data_stack_and_channel()
@@ -149,9 +147,9 @@ def get_project_channel_data():
             # bit depth
             for depth in ["8", "16", "16f", "32f"]:
                 config_map["parameters"]["bitDepth"] = depth  # noqa
-                colorspaces[key + depth] = _get_query_output(config)
+                colorspaces[key + depth] = _get_colorspace(config)
         else:
             # Data channel (not color managed)
-            colorspaces[key] = _get_query_output(config)
+            colorspaces[key] = _get_colorspace(config)
 
     return colorspaces

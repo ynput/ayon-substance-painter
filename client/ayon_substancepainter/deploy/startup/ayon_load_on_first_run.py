@@ -1,6 +1,9 @@
 """Ease the AYON on-boarding process by loading the plug-in on first run"""
+import logging
 
 AYON_PLUGIN_NAME = "ayon_plugin"
+
+log = logging.getLogger(__name__)
 
 
 def start_plugin():
@@ -10,9 +13,14 @@ def start_plugin():
             get_settings,
             LAUNCH_AT_START_KEY,
             ON_STATE,
-            PLUGINS_MENU,
             plugin_manager
         )
+        try:
+            # Substance Painter >=12.0
+            from painter_plugins_ui import _PLUGINS_MENU as PLUGINS_MENU
+        except ImportError:
+            # Substance Painter <12.0
+            from painter_plugins_ui import PLUGINS_MENU
 
         # The `painter_plugins_ui` plug-in itself is also a startup plug-in
         # we need to take into account that it could run either earlier or
@@ -38,6 +46,11 @@ def start_plugin():
                     action.blockSignals(True)
                     action.setChecked(True)
                     action.blockSignals(False)
+        else:
+            print(
+                "AYON plug-in is explicitly disabled by user. To enable it,"
+                " please load 'ayon_plugin' in the Python menu."
+            )
 
-    except Exception as exc:
-        print(exc)
+    except Exception:
+        log.error("Unable to auto-load AYON plug-in", exc_info=True)
