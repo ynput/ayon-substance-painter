@@ -192,11 +192,6 @@ class SubstanceHost(HostBase, IWorkfileHost, ILoadHost, IPublishHost):
             lambda: host_tools.show_scene_inventory(parent=parent)
         )
 
-        action = menu.addAction("Library...")
-        action.triggered.connect(
-            lambda: host_tools.show_library_loader(parent=parent)
-        )
-
         menu.addSeparator()
         action = menu.addAction("Work Files...")
         action.triggered.connect(
